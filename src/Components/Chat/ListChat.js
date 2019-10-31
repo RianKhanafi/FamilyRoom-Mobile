@@ -35,7 +35,11 @@ class ListChat extends Component {
                     <Col size={2}>
                       <View style={Style.wrapperImage}>
                         <Image
-                          source={require('../../../public/asset/image/moana.jpg')}
+                          source={{
+                            uri: `https://ui-avatars.com/api/?size=256&rounded=true&name=${this.props.users[
+                              key
+                            ].Users.name.replace(' ', '+')}`,
+                          }}
                           style={Style.imageSize}
                         />
                       </View>

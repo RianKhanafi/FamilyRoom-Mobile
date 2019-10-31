@@ -50,7 +50,7 @@ const Style = StyleSheet.create({
   wrapperImage: {
     width: 60,
     height: 60,
-    backgroundColor: '#f20e07',
+    backgroundColor: '#eaeaea',
     borderRadius: 50,
     overflow: 'hidden',
   },

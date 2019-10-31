@@ -5,6 +5,7 @@ const Style = StyleSheet.create({
     marginLeft: 20,
     marginBottom: 10,
     marginRight: 20,
+    marginTop: 10,
   },
   wrapperImage: {
     width: 60,
@@ -12,6 +13,8 @@ const Style = StyleSheet.create({
     backgroundColor: '#eaeaea',
     borderRadius: 50,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#eaeaea',
   },
   imageSize: {
     width: 60,

@@ -150,7 +150,12 @@ class ChatRoom extends Component {
                       })
                     }>
                     <Image
-                      source={require('../../../public/asset/image/agnesmo.jpg')}
+                      source={{
+                        uri: `https://ui-avatars.com/api/?size=256&rounded=true&name=${Name.replace(
+                          ' ',
+                          '+',
+                        )}`,
+                      }}
                       style={Style.imageSize}
                     />
                   </TouchableOpacity>

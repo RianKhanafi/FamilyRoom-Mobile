@@ -49,7 +49,11 @@ class Family extends Component {
                   <Col size={2}>
                     <View style={Style.wrapperImage}>
                       <Image
-                        source={require('../../../../public/asset/image/agnesmo.jpg')}
+                        source={{
+                          uri: `https://ui-avatars.com/api/?size=256&rounded=true&name=${this.props.contact[
+                            item
+                          ].Users.name.replace(' ', '+')}`,
+                        }}
                         style={Style.imageSize}
                       />
                     </View>
