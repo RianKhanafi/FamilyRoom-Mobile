@@ -25,6 +25,7 @@ class Home extends Component {
       users: [],
     };
   }
+
   componentWillMount() {
     const db = firebase.database();
     const ref = db.ref('users');
@@ -41,16 +42,19 @@ class Home extends Component {
       },
     );
   }
+
   handleHeader = async data => {
     this.setState({
       header: 1,
     });
   };
+
   handleSearch = async data => {
     this.setState({
       header: 0,
     });
   };
+
   render() {
     const getHeader = this.state.header;
     return (
@@ -66,7 +70,6 @@ class Home extends Component {
             users={this.state.users}
             user={this.state.user}
           />
-          {/* <Text>{this.state.users}</Text> */}
         </Content>
       </Container>
     );

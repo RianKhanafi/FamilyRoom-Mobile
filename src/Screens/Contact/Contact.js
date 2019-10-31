@@ -19,14 +19,40 @@ import {
 import {Image, TouchableOpacity} from 'react-native';
 import Style from './Style';
 import Header from '../../Components/Header/Header';
+import * as firebase from 'firebase';
 import MyFamily from './Tabs/Family';
 import Grand from './Tabs/Grand';
 import Kerabat from './Tabs/Kinsman';
 class Contact extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+    };
+  }
+  componentWillMount() {
+    this.getUsersList();
+  }
+
+  getUsersList = async () => {
+    const db = firebase.database();
+    const ref = db.ref('users');
+    ref.on(
+      'value',
+      email => {
+        let userEmail = email.val();
+        this.setState({
+          users: userEmail,
+        });
+      },
+      errorObject => {
+        console.log('The read failed: ' + errorObject.code);
+      },
+    );
+  };
   render() {
     return (
       <Container>
-        {/* <Header /> */}
         <Content>
           <View style={Style.header}>
             <Grid>
@@ -51,7 +77,7 @@ class Contact extends Component {
                 textStyle={Style.textStyle}
                 activeTabStyle={Style.background}
                 activeTextStyle={Style.activeTextStyle}>
-                <MyFamily />
+                <MyFamily contact={this.state.users} />
               </Tab>
               <Tab
                 heading="kinsman"

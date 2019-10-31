@@ -10,7 +10,7 @@ const Style = StyleSheet.create({
     marginBottom: 60,
   },
   rightChat: {
-    width: '80%',
+    maxWidth: '80%',
     alignSelf: 'flex-end',
     backgroundColor: '#fef8e8',
     padding: 20,
@@ -22,7 +22,7 @@ const Style = StyleSheet.create({
     margin: 10,
   },
   leftChat: {
-    width: '80%',
+    maxWidth: '80%',
     alignSelf: 'flex-start',
     backgroundColor: '#ffeff0',
     padding: 20,
@@ -36,7 +36,7 @@ const Style = StyleSheet.create({
   wrapperImage: {
     width: 60,
     height: 60,
-    backgroundColor: '#f20e07',
+    backgroundColor: '#eaeaea',
     borderRadius: 50,
     overflow: 'hidden',
   },
@@ -51,7 +51,8 @@ const Style = StyleSheet.create({
   },
   time: {
     fontFamily: 'Montserrat-Regular',
-    fontSize: 15,
+    fontSize: 10,
+    paddingTop: 5,
     color: '#bcbdc6',
   },
   badge: {

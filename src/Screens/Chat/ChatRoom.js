@@ -13,7 +13,8 @@ import {
   Button,
   Badge,
 } from 'native-base';
-import {TouchableOpacity, Image} from 'react-native';
+import {TouchableOpacity, Image, SafeAreaView} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import Style from './Style';
 
@@ -104,11 +105,34 @@ class ChatRoom extends Component {
       this.setState({textMessage: ''});
     }
   };
+  convertTime = time => {
+    let d = new Date(time);
+    let c = new Date();
+    let result = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':';
+    result += (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+    if (c.getDay() !== d.getDay()) {
+      result = d.getDate() + ' ' + d.getMonth() + ' ' + result;
+    }
+    return result;
+  };
+  renderRow = ({item}) => {
+    console.log(item.message);
+    const email = this.props.navigation.getParam('email');
+    return (
+      <View style={Style.widthChat}>
+        <View style={item.from !== email ? Style.rightChat : Style.leftChat}>
+          <Text style={Style.messageText}>{item.message}</Text>
+          <Text style={Style.time}>{this.convertTime(item.time)}</Text>
+        </View>
+      </View>
+    );
+  };
   render() {
-    console.log(this.state.chat);
     let number = this.props.navigation.getParam('phone');
     const userSend = this.props.navigation.getParam('userSend');
     const Name = this.props.navigation.getParam('name');
+    const Phone = this.props.navigation.getParam('phone');
+    const email = this.props.navigation.getParam('email');
     return (
       <Container>
         <View style={Style.headerChat}>
@@ -117,7 +141,14 @@ class ChatRoom extends Component {
               <Row style={Style.alignItems}>
                 <View style={Style.wrapperImage}>
                   <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('Tracking')}>
+                    onPress={() =>
+                      this.props.navigation.navigate('Profile', {
+                        name: Name,
+                        phone: Phone,
+                        email: email,
+                        userSend: userSend,
+                      })
+                    }>
                     <Image
                       source={require('../../../public/asset/image/agnesmo.jpg')}
                       style={Style.imageSize}
@@ -149,29 +180,14 @@ class ChatRoom extends Component {
         </View>
         <Content>
           <View style={Style.marginChat}>
-            {this.state.chat !== null ? (
-              this.state.chat.map(key => {
-                if (key.from !== this.props.navigation.getParam('email')) {
-                  return (
-                    <View style={Style.widthChat}>
-                      <View style={Style.rightChat}>
-                        <Text style={Style.messageText}>{key.message}</Text>
-                      </View>
-                    </View>
-                  );
-                } else {
-                  return (
-                    <View style={Style.widthChat}>
-                      <View style={Style.leftChat}>
-                        <Text style={Style.messageText}>{key.message}</Text>
-                      </View>
-                    </View>
-                  );
-                }
-              })
-            ) : (
-              <Text>Message Null</Text>
-            )}
+            <SafeAreaView>
+              <FlatList
+                data={this.state.chat}
+                renderItem={this.renderRow}
+                keyExtractor={(item, index) => index.toString()}
+                inverted
+              />
+            </SafeAreaView>
           </View>
         </Content>
         <View style={Style.sendChat}>
@@ -184,7 +200,7 @@ class ChatRoom extends Component {
               />
               <Input
                 placeholder="Ketik Pesan"
-                value={this.state.chatText}
+                value={this.state.textMessage}
                 onChangeText={text => this.setState({textMessage: text})}
               />
             </Item>
