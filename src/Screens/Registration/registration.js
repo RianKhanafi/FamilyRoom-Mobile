@@ -26,10 +26,6 @@ if (!firebase.apps.length) {
     projectId: 'familyroom-3b7fd',
     storageBucket: 'familyroom-3b7fd.appspot.com',
     messagingSenderId: '251741117951',
-    // appId: "1:251741117951:web:248ea35ae97c9f65395bca",
-    // measurementId: "G-0QH5QBFZTL"
-    // Initialize Firebase
-    // firebase.initializeApp(firebaseConfig);
   });
 }
 class Registration extends Component {
@@ -39,19 +35,30 @@ class Registration extends Component {
       email: '',
       password: '',
       phone: '',
+      name: '',
       error: '',
       loading: false,
     };
   }
   handleRegistration() {
     this.setState({error: '', loading: true});
-
     const {email, password} = this.state;
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
+        var userf = firebase.auth().currentUser;
+        userf.updateProfile({displayName: this.state.name});
         this.setState({error: '', loading: false});
+        var db = firebase.database();
+        var ref = db.ref('users');
+        ref.push({
+          Users: {
+            email: this.state.email,
+            name: this.state.name,
+            phone: this.state.phone,
+          },
+        });
         this.props.navigation.navigate('Login');
       })
       .catch(() => {
@@ -59,9 +66,6 @@ class Registration extends Component {
       });
   }
   render() {
-    console.log(this.state.username);
-    console.log(this.state.phone);
-    console.log(this.state.password);
     return (
       <Container>
         <Content>
@@ -85,6 +89,13 @@ class Registration extends Component {
                       <Input
                         onChangeText={email => this.setState({email})}
                         value={this.state.email}
+                      />
+                    </Item>
+                    <Item stackedLabel last>
+                      <Label>Name</Label>
+                      <Input
+                        onChangeText={name => this.setState({name})}
+                        value={this.state.name}
                       />
                     </Item>
                     <Item stackedLabel last>

@@ -15,7 +15,14 @@ import {
   Spinner,
   Input,
 } from 'native-base';
-import {Image} from 'react-native';
+import {Image, Alert} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+// import {API_KEY,
+// AUTH_DOMAIN,
+// DATABASE_URL,
+// PROJECT_ID,
+// STORAGE_BUCKET,
+// MESSAGEING_SENDER_ID} from 'react-native-dotenv'
 import * as firebase from 'firebase';
 import Style from './style';
 if (!firebase.apps.length) {
@@ -39,20 +46,23 @@ class Login extends Component {
       loading: false,
     };
   }
-  handleLogin() {
+  handleLogin = async () => {
     this.setState({error: '', loading: true});
     const {email, password} = this.state;
+
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({error: '', loading: false});
-        this.props.navigation.navigate('Chat');
+        this.props.navigation.navigate('Chat', {email: this.state.email});
+        Alert.alert('Success', 'Login success');
       })
       .catch(() => {
         this.setState({error: 'Authentication Failed', loading: false});
+        Alert.alert('Error', 'Incorrect Email or Password');
       });
-  }
+  };
   render() {
     return (
       <Container>

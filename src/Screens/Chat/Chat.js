@@ -13,12 +13,33 @@ import axios from 'axios';
 import ListChat from '../../Components/Chat/ListChat';
 import Search from '../../Components/Header/SearchHeader';
 import MainHeader from '../../Components/Header/Header';
+import * as firebase from 'firebase';
+import {AsyncStorage, FlatList} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       header: 0,
+      user: this.props.navigation.getParam('email'),
+      users: [],
     };
+  }
+  componentWillMount() {
+    const db = firebase.database();
+    const ref = db.ref('users');
+    ref.on(
+      'value',
+      email => {
+        let userEmail = email.val();
+        this.setState({
+          users: userEmail,
+        });
+      },
+      errorObject => {
+        console.log('The read failed: ' + errorObject.code);
+      },
+    );
   }
   handleHeader = async data => {
     this.setState({
@@ -30,7 +51,6 @@ class Home extends Component {
       header: 0,
     });
   };
-
   render() {
     const getHeader = this.state.header;
     return (
@@ -41,7 +61,12 @@ class Home extends Component {
           <MainHeader handleHeader={this.handleHeader} title="Your Chat" />
         )}
         <Content>
-          <ListChat navigate={this.props.navigation.navigate} />
+          <ListChat
+            navigate={this.props.navigation.navigate}
+            users={this.state.users}
+            user={this.state.user}
+          />
+          {/* <Text>{this.state.users}</Text> */}
         </Content>
       </Container>
     );

@@ -12,6 +12,8 @@ import Profile from './Screens/Profile/Profile';
 import Tracking from './Screens/Tracking/Tracking';
 import Login from './Screens/Registration/login';
 import Registration from './Screens/Registration/registration';
+import Example from './Example/example';
+
 const MainNavigator = createStackNavigator(
   {
     Chat,
@@ -22,6 +24,7 @@ const MainNavigator = createStackNavigator(
     Tracking,
     Login,
     Registration,
+    Example,
     Chat: createMaterialBottomTabNavigator({
       Chat: {
         screen: Chat,

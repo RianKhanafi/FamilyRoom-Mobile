@@ -24,37 +24,15 @@ class ChatRoom extends Component {
       textMessage: '',
       chat: [],
       userMessage: [],
-      currenName: '',
     };
   }
   componentWillMount() {
-    let userf = firebase.auth().currentUser;
-    this.setState({
-      currenName: userf.displayName,
-    });
     const db = firebase.database();
-    const ref = db.ref(
-      'message/' +
-        this.props.navigation.getParam('name') +
-        '/' +
-        userf.displayName,
-    );
+    const ref = db.ref('message');
     ref.on(
       'value',
-      data => {
-        let usermessage = [];
-        data.forEach(child => {
-          usermessage = [
-            {
-              _id: child.key,
-              message: child.val().message,
-              from: child.val().from,
-              time: child.val().time,
-              to: child.val().to,
-            },
-            ...usermessage,
-          ];
-        });
+      message => {
+        let usermessage = message.val();
         this.setState({
           chat: usermessage,
         });
@@ -66,13 +44,10 @@ class ChatRoom extends Component {
   }
 
   sendMessage = async () => {
-    let userf = firebase.auth().currentUser;
     if (this.state.textMessage.length > 0) {
       let msgId = firebase
         .database()
-        .ref('message')
-        .child(userf.displayName)
-        .child(this.props.navigation.getParam('name'))
+        .ref('message/' + this.props.navigation.getParam('phone'))
         .push().key;
       let updates = {};
       let message = {
@@ -82,20 +57,10 @@ class ChatRoom extends Component {
         to: this.props.navigation.getParam('email'),
       };
       updates[
-        'message/' +
-          this.props.navigation.getParam('name') +
-          '/' +
-          userf.displayName +
-          '/' +
-          msgId
+        'message/' + this.props.navigation.getParam('phone') + '/' + msgId
       ] = message;
       updates[
-        'message/' +
-          userf.displayName +
-          '/' +
-          this.props.navigation.getParam('name') +
-          '/' +
-          msgId
+        'message/' + this.props.navigation.getParam('phone') + '/' + msgId
       ] = message;
       firebase
         .database()
@@ -105,8 +70,29 @@ class ChatRoom extends Component {
     }
   };
   render() {
-    console.log(this.state.chat);
     let number = this.props.navigation.getParam('phone');
+
+    let obj = [];
+    let keys = [];
+    Object.keys(this.state.chat).map(key => {
+      obj.push(this.state.chat[key]);
+      keys.push(key);
+      // console.log(this.state.chat[key]);
+      // console.log(this.state.chat[key].TA);
+    });
+
+    let no = 1;
+    let finalChat = [];
+    Object.values(obj).map(key => {
+      finalChat.push(obj[no++]);
+      // console.log(obj[no++]);
+    });
+    console.log('a');
+    // console.log(finalChat.length);
+    for (let i = 0; i < finalChat.length; i++) {
+      console.log(finalChat[i]);
+    }
+
     const userSend = this.props.navigation.getParam('userSend');
     const Name = this.props.navigation.getParam('name');
     return (
@@ -149,29 +135,32 @@ class ChatRoom extends Component {
         </View>
         <Content>
           <View style={Style.marginChat}>
-            {this.state.chat !== null ? (
-              this.state.chat.map(key => {
-                if (key.from !== this.props.navigation.getParam('email')) {
-                  return (
-                    <View style={Style.widthChat}>
-                      <View style={Style.rightChat}>
-                        <Text style={Style.messageText}>{key.message}</Text>
-                      </View>
+            {Object.keys(finalChat[0]).map(key => {
+              if (
+                finalChat[0][key].from !==
+                this.props.navigation.getParam('email')
+              ) {
+                return (
+                  <View style={Style.widthChat}>
+                    <View style={Style.rightChat}>
+                      <Text style={Style.messageText}>
+                        {finalChat[0][key].message}
+                      </Text>
                     </View>
-                  );
-                } else {
-                  return (
-                    <View style={Style.widthChat}>
-                      <View style={Style.leftChat}>
-                        <Text style={Style.messageText}>{key.message}</Text>
-                      </View>
+                  </View>
+                );
+              } else {
+                return (
+                  <View style={Style.widthChat}>
+                    <View style={Style.leftChat}>
+                      <Text style={Style.messageText}>
+                        {finalChat[0][key].message}
+                      </Text>
                     </View>
-                  );
-                }
-              })
-            ) : (
-              <Text>Message Null</Text>
-            )}
+                  </View>
+                );
+              }
+            })}
           </View>
         </Content>
         <View style={Style.sendChat}>
