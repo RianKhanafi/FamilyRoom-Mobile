@@ -22,47 +22,42 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userProfiles: [],
+      thisUser: [],
+      email: this.props.navigation.getParam('email'),
+      phone: this.props.navigation.getParam('phone'),
+      name: this.props.navigation.getParam('name'),
+      userSend: this.props.navigation.getParam('userSend'),
       userLogin: '',
-      loginName: '',
-      loginPhone: '',
-      loginMail: '',
+      emailLogin: '',
+      phoneLogin: '',
+      latitude: 0,
+      longitude: 0,
     };
   }
 
-  componentDidMount() {
+  UNSAFE_componentWillMount() {
     this.getProfile();
   }
 
-  getProfile() {
+  getProfile = async () => {
     let userf = firebase.auth().currentUser;
-    this.setState({userLogin: userf.displayName});
+    this.setState({
+      userLogin: userf.displayName,
+    });
     const db = firebase.database();
     const ref = db.ref('users');
     ref.on(
       'value',
-      data => {
-        let userProfile = [];
-        data.forEach(child => {
-          userProfile = [
-            {
-              _id: child.key,
-              email: child.val().Users.email,
-              name: child.val().Users.name,
-              phone: child.val().Users.phone,
-            },
-            ...userProfile,
-          ];
-        });
-        this.setState({
-          userProfiles: userProfile,
-        });
-        this.state.userProfiles.map(item => {
-          if (item.name === this.state.userLogin) {
+      email => {
+        let userEmail = email.val();
+        Object.keys(userEmail).map(key => {
+          console.log(this.state.userLogin);
+          if (userEmail[key].Users.name === userf.displayName) {
             this.setState({
-              loginName: item.name,
-              loginPhone: item.phone,
-              loginMail: item.email,
+              emailLogin: userEmail[key].Users.email,
+              phoneLogin: userEmail[key].Users.phone,
+              latitude: userEmail[key].Users.latitude,
+              longitude: userEmail[key].Users.longitude,
             });
           }
         });
@@ -71,13 +66,9 @@ class Profile extends Component {
         console.log('The read failed: ' + errorObject.code);
       },
     );
-  }
+  };
 
   render() {
-    let email = this.props.navigation.getParam('email');
-    let phone = this.props.navigation.getParam('phone');
-    let name = this.props.navigation.getParam('name');
-    let userSend = this.props.navigation.getParam('userSend');
     return (
       <Container>
         <Header hasSegment style={Style.header}>
@@ -107,11 +98,31 @@ class Profile extends Component {
           <View style={Style.wrapper}>
             <View style={Style.wrapperImage}>
               <Image
-                source={require('../../../public/asset/image/moana.jpg')}
+                source={
+                  this.props.navigation.getParam('email') === undefined
+                    ? {
+                        uri: `https://ui-avatars.com/api/?size=256&rounded=true&name=${this.state.userLogin.replace(
+                          ' ',
+                          '+',
+                        )}`,
+                      }
+                    : {
+                        uri: `https://ui-avatars.com/api/?size=256&rounded=true&name=${this.state.name.replace(
+                          ' ',
+                          '+',
+                        )}`,
+                      }
+                }
                 style={Style.imageSize}
               />
             </View>
-            <Text style={Style.name}>{name}</Text>
+
+            <Text style={Style.name}>
+              {this.props.navigation.getParam('email') === undefined
+                ? this.state.userLogin
+                : this.state.name}
+            </Text>
+
             <View style={{flexDirection: 'row', flex: 1, width: '30%'}}>
               <View style={{flex: 1}}>
                 <Icon type="AntDesign" name="message1" />
@@ -131,7 +142,11 @@ class Profile extends Component {
                   <Icon type="Feather" name="phone" />
                 </Col>
                 <Col size={4}>
-                  <Text style={Style.text}>{this.state.loginName}</Text>
+                  <Text style={Style.text}>
+                    {this.props.navigation.getParam('phone') === undefined
+                      ? this.state.phoneLogin
+                      : this.state.phone}
+                  </Text>
                 </Col>
               </Row>
               <Row style={Style.rowDimention}>
@@ -139,17 +154,33 @@ class Profile extends Component {
                   <Icon type="AntDesign" name="mail" />
                 </Col>
                 <Col size={4}>
-                  <Text style={Style.text}>{email}</Text>
+                  <Text style={Style.text}>
+                    {' '}
+                    {this.props.navigation.getParam('email') === undefined
+                      ? this.state.emailLogin
+                      : this.state.email}
+                  </Text>
                 </Col>
               </Row>
-              <Row style={Style.rowDimention}>
-                <Col size={1}>
-                  <Icon type="SimpleLineIcons" name="location-pin" />
-                </Col>
-                <Col size={4}>
-                  <Text style={Style.text}>Jl. Sukasari III No.47, Bogor</Text>
-                </Col>
-              </Row>
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate('Tracking', {
+                    name: this.state.userLogin,
+                    latitude: this.state.latitude, // didapatkan ketika get User
+                    longitude: this.state.longitude, // didapatkan ketika get User
+                  })
+                }>
+                <Row style={Style.rowDimention}>
+                  <Col size={1}>
+                    <Icon type="SimpleLineIcons" name="location-pin" />
+                  </Col>
+                  <Col size={4}>
+                    <Text style={Style.text}>
+                      Jl. Sukasari III No.47, Bogor
+                    </Text>
+                  </Col>
+                </Row>
+              </TouchableOpacity>
               <Row style={Style.rowDimention}>
                 <Button
                   full

@@ -2,10 +2,10 @@ import {StyleSheet} from 'react-native';
 
 const Style = StyleSheet.create({
   header: {
-    backgroundColor: '#f20e07',
+    backgroundColor: '#fb3f2a',
     marginBottom: 10,
-    borderTopRightRadius: 50,
-    borderBottomRightRadius: 50,
+    // borderTopRightRadius: 50,
+    borderBottomRightRadius: 25,
     overflow: 'hidden',
   },
   brand: {

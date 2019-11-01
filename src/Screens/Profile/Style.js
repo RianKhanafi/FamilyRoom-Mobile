@@ -12,7 +12,11 @@ const Style = StyleSheet.create({
   wrapperImage: {
     width: 120,
     height: 120,
-    backgroundColor: '#eaeaea',
+    backgroundColor: '#f0e9e9',
+    borderTopLeftRadius: 100,
+    borderBottomLeftRadius: 50,
+    borderTopRightRadius: 43,
+    borderBottomRightRadius: 150,
     borderRadius: 100,
     overflow: 'hidden',
   },
@@ -55,7 +59,7 @@ const Style = StyleSheet.create({
   button: {
     width: '100%',
     elevation: 0,
-    backgroundColor: '#f20e07',
+    backgroundColor: '#fb3f2a',
     borderRadius: 20,
     elevation: 2,
   },

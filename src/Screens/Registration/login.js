@@ -16,13 +16,7 @@ import {
   Input,
 } from 'native-base';
 import {Image, Alert} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-// import {API_KEY,
-// AUTH_DOMAIN,
-// DATABASE_URL,
-// PROJECT_ID,
-// STORAGE_BUCKET,
-// MESSAGEING_SENDER_ID} from 'react-native-dotenv'
+
 import * as firebase from 'firebase';
 import Style from './style';
 if (!firebase.apps.length) {
@@ -56,7 +50,6 @@ class Login extends Component {
       .then(() => {
         this.setState({error: '', loading: false});
         this.props.navigation.navigate('Chat', {email: this.state.email});
-        Alert.alert('Success', 'Login success');
       })
       .catch(() => {
         this.setState({error: 'Authentication Failed', loading: false});
@@ -92,6 +85,7 @@ class Login extends Component {
                     <Item floatingLabel last>
                       <Label>Password</Label>
                       <Input
+                        secureTextEntry={true}
                         onChangeText={password => this.setState({password})}
                         value={this.state.password}
                       />
@@ -104,7 +98,8 @@ class Login extends Component {
                   <Text style={Style.loginText}>Login</Text>
                 </Col>
                 <Col size={1}>
-                  {this.state.email.length > 0 ? (
+                  {this.state.email.length > 0 &&
+                  this.state.password.length > 0 ? (
                     <Button
                       style={Style.loginActive}
                       onPress={this.handleLogin.bind(this)}>

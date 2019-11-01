@@ -36,7 +36,11 @@ const Style = StyleSheet.create({
   wrapperImage: {
     width: 60,
     height: 60,
-    backgroundColor: '#eaeaea',
+    backgroundColor: '#f0e9e9',
+    borderTopLeftRadius: 30,
+    borderBottomLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderBottomRightRadius: 3,
     borderRadius: 50,
     overflow: 'hidden',
   },
@@ -72,6 +76,14 @@ const Style = StyleSheet.create({
   },
   buttonSend: {
     color: '#f20e07',
+    fontSize: 30,
+  },
+  buttonSend: {
+    color: '#f20e07',
+    fontSize: 30,
+  },
+  btndisabled: {
+    color: '#f4e8d9',
     fontSize: 30,
   },
   emotiocnIcon: {

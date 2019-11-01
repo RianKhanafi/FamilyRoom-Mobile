@@ -35,51 +35,52 @@ class Family extends Component {
             Send Message To :
           </Text>
           {Object.keys(this.props.contact).map(item => {
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigate('ChatRoom', {
-                    name: this.props.contact[item].Users.name,
-                    phone: this.props.contact[item].Users.phone,
-                    email: this.props.contact[item].Users.email,
-                    userSend: this.props.user,
-                  })
-                }>
-                <Grid style={{marginBottom: 10}}>
-                  <Col size={2}>
-                    <View style={Style.wrapperImage}>
-                      <Image
-                        source={{
-                          uri: `https://ui-avatars.com/api/?size=256&rounded=true&name=${this.props.contact[
-                            item
-                          ].Users.name.replace(' ', '+')}`,
-                        }}
-                        style={Style.imageSize}
-                      />
-                    </View>
-                  </Col>
-                  <Col size={4}>
-                    <Row style={{alignItems: 'center'}}>
-                      <Col>
-                        <Text style={Style.name}>
-                          {this.props.contact[item].Users.name}
-                        </Text>
-                        <Text style={{fontFamily: 'Montserrat-Regular'}}>
-                          in Jakarta
-                        </Text>
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col size={1}>
-                    <Row style={{alignItems: 'center'}}>
-                      <Col style={{alignItems: 'center'}}>
-                        <Text style={{color: '#f20e07'}}>Loct</Text>
-                      </Col>
-                    </Row>
-                  </Col>
-                </Grid>
-              </TouchableOpacity>
-            );
+            if (this.props.contact[item].Users.name !== this.props.userLogin) {
+              return (
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigate('Tracking', {
+                      name: this.props.contact[item].Users.name,
+                      latitude: this.props.contact[item].Users.latitude,
+                      longitude: this.props.contact[item].Users.longitude,
+                    })
+                  }>
+                  <Grid style={{marginBottom: 10}}>
+                    <Col size={2}>
+                      <View style={Style.wrapperImage}>
+                        <Image
+                          source={{
+                            uri: `https://ui-avatars.com/api/?size=256&rounded=true&name=${this.props.contact[
+                              item
+                            ].Users.name.replace(' ', '+')}`,
+                          }}
+                          style={Style.imageSize}
+                        />
+                      </View>
+                    </Col>
+                    <Col size={4}>
+                      <Row style={{alignItems: 'center'}}>
+                        <Col>
+                          <Text style={Style.name}>
+                            {this.props.contact[item].Users.name}
+                          </Text>
+                          <Text style={{fontFamily: 'Montserrat-Regular'}}>
+                            In Jakarta
+                          </Text>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col size={1}>
+                      <Row style={{alignItems: 'center'}}>
+                        <Col style={{alignItems: 'center'}}>
+                          <Text style={{color: '#f20e07'}}>Loc</Text>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Grid>
+                </TouchableOpacity>
+              );
+            }
           })}
         </Content>
       </Content>

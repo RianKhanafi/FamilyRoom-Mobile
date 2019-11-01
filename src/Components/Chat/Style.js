@@ -10,11 +10,12 @@ const Style = StyleSheet.create({
   wrapperImage: {
     width: 60,
     height: 60,
-    backgroundColor: '#eaeaea',
-    borderRadius: 50,
+    backgroundColor: '#f0e9e9',
+    borderTopLeftRadius: 30,
+    borderBottomLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderBottomRightRadius: 3,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#eaeaea',
   },
   imageSize: {
     width: 60,

@@ -39,7 +39,7 @@ const MainNavigator = createStackNavigator(
               />
             </View>
           ),
-          activeColor: '#f20e07',
+          activeColor: '#fb3f2a',
           inactiveColor: '#b9b9b9',
           barStyle: {backgroundColor: '#fff'},
         },
@@ -56,7 +56,7 @@ const MainNavigator = createStackNavigator(
               />
             </View>
           ),
-          activeColor: '#f20e07',
+          activeColor: '#fb3f2a',
           inactiveColor: '#b9b9b9',
           barStyle: {backgroundColor: '#fff'},
         },
@@ -74,7 +74,7 @@ const MainNavigator = createStackNavigator(
               />
             </View>
           ),
-          activeColor: '#f20e07',
+          activeColor: '#fb3f2a',
           inactiveColor: '#b9b9b9',
           barStyle: {backgroundColor: '#fff'},
         },

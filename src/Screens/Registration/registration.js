@@ -16,6 +16,7 @@ import {
   Spinner,
 } from 'native-base';
 import {Image} from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
 import * as firebase from 'firebase';
 import Style from './style';
 if (!firebase.apps.length) {
@@ -38,8 +39,33 @@ class Registration extends Component {
       name: '',
       error: '',
       loading: false,
+      latitude: 0,
+      longitude: 0,
+      error: '',
     };
   }
+
+  UNSAFE_componentWillMount() {
+    // get user location
+    Geolocation.getCurrentPosition(
+      position => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      error => {
+        this.setState({error: error.message});
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 20000,
+        maximumAge: 1000,
+        distanceFilter: 1,
+      },
+    );
+  }
+
   handleRegistration() {
     this.setState({error: '', loading: true});
     const {email, password} = this.state;
@@ -57,6 +83,8 @@ class Registration extends Component {
             email: this.state.email,
             name: this.state.name,
             phone: this.state.phone,
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
           },
         });
         this.props.navigation.navigate('Login');
@@ -66,6 +94,7 @@ class Registration extends Component {
       });
   }
   render() {
+    console.log(this.state.longitude);
     return (
       <Container>
         <Content>
@@ -108,6 +137,7 @@ class Registration extends Component {
                     <Item stackedLabel last>
                       <Label>Password</Label>
                       <Input
+                        secureTextEntry={true}
                         onChangeText={password => this.setState({password})}
                         value={this.state.password}
                       />
@@ -120,7 +150,10 @@ class Registration extends Component {
                   <Text style={Style.loginText}>Register</Text>
                 </Col>
                 <Col size={1}>
-                  {this.state.email.length > 0 ? (
+                  {this.state.email.length > 0 &&
+                  this.state.password.length > 0 &&
+                  this.state.phone.length > 0 &&
+                  this.state.name.length > 0 ? (
                     <Button
                       style={Style.loginActive}
                       onPress={this.handleRegistration.bind(this)}>

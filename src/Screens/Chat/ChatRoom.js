@@ -23,12 +23,15 @@ class ChatRoom extends Component {
     super(props);
     this.state = {
       textMessage: '',
-      chat: [],
-      userMessage: [],
+      chat: [], // userMessage
+      userMessage: [], // usermessage from firebase
       currenName: '',
+      latitude: this.props.navigation.getParam('latitude'), // get location
+      longitude: this.props.navigation.getParam('longitude'), // get location
     };
   }
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
+    // get chat from firebase
     let userf = firebase.auth().currentUser;
     this.setState({
       currenName: userf.displayName,
@@ -116,10 +119,11 @@ class ChatRoom extends Component {
     return result;
   };
   renderRow = ({item}) => {
-    console.log(item.message);
+    // console.log(item.message);
     const email = this.props.navigation.getParam('email');
     return (
       <View style={Style.widthChat}>
+        {/* ketika pengirim dengan userLogin berbeda maka position right */}
         <View style={item.from !== email ? Style.rightChat : Style.leftChat}>
           <Text style={Style.messageText}>{item.message}</Text>
           <Text style={Style.time}>{this.convertTime(item.time)}</Text>
@@ -133,6 +137,7 @@ class ChatRoom extends Component {
     const Name = this.props.navigation.getParam('name');
     const Phone = this.props.navigation.getParam('phone');
     const email = this.props.navigation.getParam('email');
+
     return (
       <Container>
         <View style={Style.headerChat}>
@@ -174,11 +179,21 @@ class ChatRoom extends Component {
             </Col>
             <Col>
               <Row style={Style.alignItems}>
-                <Icon
-                  type="SimpleLineIcons"
-                  name="options"
-                  style={{color: '#fc402c'}}
-                />
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('Tracking', {
+                      name: Name,
+                      phone: Phone,
+                      latitude: this.state.latitude, // didapatkan ketika get User
+                      longitude: this.state.longitude, // didapatkan ketika get User
+                    })
+                  }>
+                  <Icon
+                    type="SimpleLineIcons"
+                    name="location-pin"
+                    style={{color: '#fc402c'}}
+                  />
+                </TouchableOpacity>
               </Row>
             </Col>
           </Grid>
@@ -186,6 +201,7 @@ class ChatRoom extends Component {
         <Content>
           <View style={Style.marginChat}>
             <SafeAreaView>
+              {/* chat data */}
               <FlatList
                 data={this.state.chat}
                 renderItem={this.renderRow}
@@ -211,9 +227,26 @@ class ChatRoom extends Component {
             </Item>
           </Row>
           <Row style={{flex: 2}}>
-            <Button transparent onPress={this.sendMessage.bind(this)}>
-              <Icon type="MaterialIcons" name="send" style={Style.buttonSend} />
-            </Button>
+            {this.state.textMessage.length > 0 ? (
+              <Button transparent onPress={this.sendMessage.bind(this)}>
+                <Icon
+                  type="MaterialIcons"
+                  name="send"
+                  style={Style.buttonSend}
+                />
+              </Button>
+            ) : (
+              <Button
+                disabled
+                transparent
+                onPress={this.sendMessage.bind(this)}>
+                <Icon
+                  type="MaterialIcons"
+                  name="send"
+                  style={Style.btndisabled}
+                />
+              </Button>
+            )}
           </Row>
         </View>
       </Container>

@@ -12,10 +12,9 @@ import {
 } from 'native-base';
 import {Image, TouchableOpacity} from 'react-native';
 import Style from './Style';
+
 class ListChat extends Component {
   render() {
-    console.log(this.props.user);
-    console.log(this.props.users);
     return (
       <Container>
         <Content>
@@ -28,6 +27,8 @@ class ListChat extends Component {
                       name: this.props.users[key].Users.name,
                       phone: this.props.users[key].Users.phone,
                       email: this.props.users[key].Users.email,
+                      latitude: this.props.users[key].Users.latitude,
+                      longitude: this.props.users[key].Users.longitude,
                       userSend: this.props.user,
                     })
                   }>

@@ -26,7 +26,7 @@ class Home extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const db = firebase.database();
     const ref = db.ref('users');
     ref.on(
@@ -68,7 +68,7 @@ class Home extends Component {
           <ListChat
             navigate={this.props.navigation.navigate}
             users={this.state.users}
-            user={this.state.user}
+            user={this.state.user} // email login
           />
         </Content>
       </Container>
