@@ -155,7 +155,6 @@ class Profile extends Component {
                 </Col>
                 <Col size={4}>
                   <Text style={Style.text}>
-                    {' '}
                     {this.props.navigation.getParam('email') === undefined
                       ? this.state.emailLogin
                       : this.state.email}

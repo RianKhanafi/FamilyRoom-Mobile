@@ -16,17 +16,25 @@ import {
   Input,
 } from 'native-base';
 import {Image, Alert} from 'react-native';
-
 import * as firebase from 'firebase';
 import Style from './style';
+import {
+  FIRABASE_API_KEY,
+  AUTH_DOMAIN,
+  DATABASE_URL,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+} from 'react-native-dotenv';
+
 if (!firebase.apps.length) {
   firebase.initializeApp({
-    apiKey: 'AIzaSyCTL06E8gpJTEmCdxF8_NXcVk9aexh4Izo',
-    authDomain: 'familyroom-3b7fd.firebaseapp.com',
-    databaseURL: 'https://familyroom-3b7fd.firebaseio.com',
-    projectId: 'familyroom-3b7fd',
-    storageBucket: 'familyroom-3b7fd.appspot.com',
-    messagingSenderId: '251741117951',
+    apiKey: `${FIRABASE_API_KEY}`,
+    authDomain: `${AUTH_DOMAIN}`,
+    databaseURL: `${DATABASE_URL}`,
+    projectId: `${PROJECT_ID}`,
+    storageBucket: `${STORAGE_BUCKET}`,
+    messagingSenderId: `${MESSAGING_SENDER_ID}`,
   });
 }
 
@@ -40,6 +48,7 @@ class Login extends Component {
       loading: false,
     };
   }
+
   handleLogin = async () => {
     this.setState({error: '', loading: true});
     const {email, password} = this.state;
@@ -56,6 +65,7 @@ class Login extends Component {
         Alert.alert('Error', 'Incorrect Email or Password');
       });
   };
+
   render() {
     return (
       <Container>

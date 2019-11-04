@@ -16,6 +16,7 @@ import MainHeader from '../../Components/Header/Header';
 import * as firebase from 'firebase';
 import {AsyncStorage, FlatList} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -43,13 +44,13 @@ class Home extends Component {
     );
   }
 
-  handleHeader = async data => {
+  handleHeader = async () => {
     this.setState({
       header: 1,
     });
   };
 
-  handleSearch = async data => {
+  handleSearch = async () => {
     this.setState({
       header: 0,
     });

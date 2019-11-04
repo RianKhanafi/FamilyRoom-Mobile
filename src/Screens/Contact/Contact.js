@@ -30,6 +30,7 @@ class Contact extends Component {
       userLogin: '',
     };
   }
+
   UNSAFE_componentWillMount() {
     this.getUsersList();
   }
@@ -38,6 +39,7 @@ class Contact extends Component {
     const userf = firebase.auth().currentUser;
     const db = firebase.database();
     const ref = db.ref('users');
+
     ref.on(
       'value',
       email => {

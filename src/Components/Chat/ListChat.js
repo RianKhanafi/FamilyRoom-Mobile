@@ -56,7 +56,7 @@ class ListChat extends Component {
                               fontFamily: 'Montserrat-Regular',
                               fontSize: 13,
                             }}>
-                            You look beautiful Baby
+                            Message ...
                           </Text>
                         </Col>
                       </Row>

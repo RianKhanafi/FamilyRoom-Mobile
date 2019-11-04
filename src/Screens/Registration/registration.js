@@ -19,16 +19,26 @@ import {Image} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import * as firebase from 'firebase';
 import Style from './style';
+import {
+  FIRABASE_API_KEY,
+  AUTH_DOMAIN,
+  DATABASE_URL,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+} from 'react-native-dotenv';
+
 if (!firebase.apps.length) {
   firebase.initializeApp({
-    apiKey: 'AIzaSyCTL06E8gpJTEmCdxF8_NXcVk9aexh4Izo',
-    authDomain: 'familyroom-3b7fd.firebaseapp.com',
-    databaseURL: 'https://familyroom-3b7fd.firebaseio.com',
-    projectId: 'familyroom-3b7fd',
-    storageBucket: 'familyroom-3b7fd.appspot.com',
-    messagingSenderId: '251741117951',
+    apiKey: `${FIRABASE_API_KEY}`,
+    authDomain: `${AUTH_DOMAIN}`,
+    databaseURL: `${DATABASE_URL}`,
+    projectId: `${PROJECT_ID}`,
+    storageBucket: `${STORAGE_BUCKET}`,
+    messagingSenderId: `${MESSAGING_SENDER_ID}`,
   });
 }
+
 class Registration extends Component {
   constructor(props) {
     super(props);
@@ -73,11 +83,12 @@ class Registration extends Component {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        var userf = firebase.auth().currentUser;
+        let userf = firebase.auth().currentUser;
         userf.updateProfile({displayName: this.state.name});
         this.setState({error: '', loading: false});
-        var db = firebase.database();
-        var ref = db.ref('users');
+
+        let db = firebase.database();
+        let ref = db.ref('users');
         ref.push({
           Users: {
             email: this.state.email,
@@ -94,7 +105,6 @@ class Registration extends Component {
       });
   }
   render() {
-    console.log(this.state.longitude);
     return (
       <Container>
         <Content>

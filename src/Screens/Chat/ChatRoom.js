@@ -30,12 +30,14 @@ class ChatRoom extends Component {
       longitude: this.props.navigation.getParam('longitude'), // get location
     };
   }
+
   UNSAFE_componentWillMount() {
     // get chat from firebase
     let userf = firebase.auth().currentUser;
     this.setState({
       currenName: userf.displayName,
     });
+
     const db = firebase.database();
     const ref = db.ref(
       'message/' +
@@ -43,6 +45,7 @@ class ChatRoom extends Component {
         '/' +
         userf.displayName,
     );
+
     ref.on(
       'value',
       data => {
@@ -59,6 +62,7 @@ class ChatRoom extends Component {
             ...usermessage,
           ];
         });
+
         this.setState({
           chat: usermessage,
         });
@@ -71,6 +75,7 @@ class ChatRoom extends Component {
 
   sendMessage = async () => {
     let userf = firebase.auth().currentUser;
+
     if (this.state.textMessage.length > 0) {
       let msgId = firebase
         .database()
@@ -78,6 +83,7 @@ class ChatRoom extends Component {
         .child(userf.displayName)
         .child(this.props.navigation.getParam('name'))
         .push().key;
+
       let updates = {};
       let message = {
         message: this.state.textMessage,
@@ -85,6 +91,7 @@ class ChatRoom extends Component {
         from: this.props.navigation.getParam('userSend'),
         to: this.props.navigation.getParam('email'),
       };
+
       updates[
         'message/' +
           this.props.navigation.getParam('name') +
@@ -93,6 +100,7 @@ class ChatRoom extends Component {
           '/' +
           msgId
       ] = message;
+
       updates[
         'message/' +
           userf.displayName +
@@ -101,6 +109,7 @@ class ChatRoom extends Component {
           '/' +
           msgId
       ] = message;
+
       firebase
         .database()
         .ref()
@@ -108,6 +117,7 @@ class ChatRoom extends Component {
       this.setState({textMessage: ''});
     }
   };
+
   convertTime = time => {
     let d = new Date(time);
     let c = new Date();
@@ -118,12 +128,13 @@ class ChatRoom extends Component {
     }
     return result;
   };
+
   renderRow = ({item}) => {
-    // console.log(item.message);
     const email = this.props.navigation.getParam('email');
     return (
       <View style={Style.widthChat}>
         {/* ketika pengirim dengan userLogin berbeda maka position right */}
+
         <View style={item.from !== email ? Style.rightChat : Style.leftChat}>
           <Text style={Style.messageText}>{item.message}</Text>
           <Text style={Style.time}>{this.convertTime(item.time)}</Text>
@@ -131,6 +142,7 @@ class ChatRoom extends Component {
       </View>
     );
   };
+
   render() {
     let number = this.props.navigation.getParam('phone');
     const userSend = this.props.navigation.getParam('userSend');
@@ -255,5 +267,3 @@ class ChatRoom extends Component {
 }
 
 export default ChatRoom;
-
-// https://console.firebase.google.com/project/familyroom-3b7fd/database/familyroom-3b7fd/data
